@@ -15,10 +15,17 @@ export const getStates = async (req: Request, res: Response) => {
 export const updateIncidentStatus = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const { idEstado } = req.body;
+        const { idEstado, idRolUsuario } = req.body; 
 
         if (!idEstado) {
             return res.status(400).json({ message: 'El idEstado es obligatorio' });
+        }
+
+        const ROL_ADMIN = 1; 
+        if (idRolUsuario !== ROL_ADMIN) {
+            return res.status(403).json({ 
+                message: 'Acceso denegado: Se requiere rol de Administrador para actualizar estados' 
+            });
         }
 
         const [result] = await pool.query<ResultSetHeader>(

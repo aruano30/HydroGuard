@@ -4,13 +4,22 @@ import { RowDataPacket, ResultSetHeader } from 'mysql2';
 
 export const getIncidents = async (req: Request, res: Response) => {
     try {
-        const [rows] = await pool.query<RowDataPacket[]>(`
-            SELECT i.*, e.nombreEstado, u.nombre AS nombreUsuario 
-            FROM Incidencia i
-            JOIN EstadoIncidencia e ON i.idEstado = e.idEstado
-            JOIN Usuario u ON i.idUsuario = u.idUsuario
-            ORDER BY i.fechaCreacion DESC
-        `);
+        const { idEstado, idUsuario } = req.query;
+        
+        let query = 'SELECT * FROM Incidencia WHERE 1=1';
+        const params: any[] = [];
+
+        if (idEstado) {
+            query += ' AND idEstado = ?';
+            params.push(idEstado);
+        }
+
+        if (idUsuario) {
+            query += ' AND idUsuario = ?';
+            params.push(idUsuario);
+        }
+
+        const [rows] = await pool.query<RowDataPacket[]>(query, params);
         res.json(rows);
     } catch (error) {
         console.error('Error al obtener incidencias:', error);
@@ -20,27 +29,20 @@ export const getIncidents = async (req: Request, res: Response) => {
 
 export const createIncident = async (req: Request, res: Response) => {
     try {
-        const { titulo, descripcion, ubicacion, idUsuario } = req.body;
-
+        const { titulo, descripcion, ubicacion, idUsuario, idEstado } = req.body;
+        
         if (!titulo || !descripcion || !ubicacion || !idUsuario) {
-            return res.status(400).json({ message: 'Todos los campos son obligatorios (incluyendo idUsuario)' });
+            return res.status(400).json({ message: 'Faltan campos obligatorios (titulo, descripcion, ubicacion, idUsuario)' });
         }
-
-        const idEstadoDefault = 1; 
 
         const [result] = await pool.query<ResultSetHeader>(
             'INSERT INTO Incidencia (titulo, descripcion, ubicacion, idUsuario, idEstado) VALUES (?, ?, ?, ?, ?)',
-            [titulo, descripcion, ubicacion, idUsuario, idEstadoDefault]
+            [titulo, descripcion, ubicacion, idUsuario, idEstado || 1] 
         );
 
-        res.status(201).json({
-            idIncidencia: result.insertId,
-            titulo,
-            descripcion,
-            ubicacion,
-            idUsuario,
-            idEstado: idEstadoDefault,
-            message: 'Incidencia reportada con éxito'
+        res.status(201).json({ 
+            message: 'Incidencia creada exitosamente', 
+            idIncidencia: result.insertId 
         });
     } catch (error) {
         console.error('Error al crear incidencia:', error);

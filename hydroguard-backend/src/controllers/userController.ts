@@ -4,7 +4,7 @@ import { RowDataPacket, ResultSetHeader } from 'mysql2';
 
 export const getUsers = async (req: Request, res: Response) => {
     try {
-        const [rows] = await pool.query<RowDataPacket[]>('SELECT idUsuario, nombre, apellido, correo, telefono, idRol FROM Usuario');
+        const [rows] = await pool.query<RowDataPacket[]>('SELECT idUsuario, nombre, correo, idRol FROM Usuario');
         res.json(rows);
     } catch (error) {
         console.error('Error al obtener usuarios:', error);
@@ -14,30 +14,33 @@ export const getUsers = async (req: Request, res: Response) => {
 
 export const createUser = async (req: Request, res: Response) => {
     try {
-        const { nombre, apellido, correo, password, telefono, idRol } = req.body;
+        const { nombre, correo, password, idRol } = req.body;
 
-        if (!nombre || !apellido || !correo || !password || !idRol) {
-            return res.status(400).json({ message: 'Faltan campos obligatorios' });
+        if (!nombre || !correo || !password) {
+            return res.status(400).json({ 
+                message: 'Todos los campos obligatorios (nombre, correo, password) deben ser llenados' 
+            });
         }
 
         const [result] = await pool.query<ResultSetHeader>(
-            'INSERT INTO Usuario (nombre, apellido, correo, password, telefono, idRol) VALUES (?, ?, ?, ?, ?, ?)',
-            [nombre, apellido, correo, password, telefono || null, idRol]
+            'INSERT INTO Usuario (nombre, correo, password, idRol) VALUES (?, ?, ?, ?)',
+            [nombre, correo, password, idRol || 2] 
         );
 
-        res.status(201).json({
-            idUsuario: result.insertId,
-            nombre,
-            apellido,
-            correo,
-            idRol,
-            message: 'Usuario registrado con éxito'
+        res.status(201).json({ 
+            message: 'Usuario registrado exitosamente',
+            idUsuario: result.insertId 
         });
+
     } catch (error: any) {
         console.error('Error al registrar usuario:', error);
-        if (error.code === 'ER_DUP_ENTRY') {
-            return res.status(400).json({ message: 'El correo electrónico ya está registrado' });
+
+        if (error.code === 'ER_DUP_ENTRY' || error.errno === 1062) {
+            return res.status(400).json({ 
+                message: 'El correo electrónico ya se encuentra registrado. Utiliza otro.' 
+            });
         }
-        res.status(500).json({ message: 'Error interno del servidor' });
+
+        res.status(500).json({ message: 'Error interno del servidor al procesar el registro' });
     }
 };
