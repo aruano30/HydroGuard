@@ -1,0 +1,32 @@
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-header">
+      <h2>HydroGuard 💧</h2>
+      <p>Inicia sesión en tu cuenta</p>
+    </div>
+
+    @if (errorMessage) {
+      <div style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 0.9rem; text-align: center;">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <div class="input-group">
+        <label for="correo">Correo Electrónico</label>
+        <input id="correo" formControlName="correo" type="email" placeholder="tucorreo@example.com" />
+      </div>
+
+      <div class="input-group">
+        <label for="password">Contraseña</label>
+        <input id="password" formControlName="password" type="password" placeholder="••••••••" />
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid" class="btn-primary">Entrar</button>
+    </form>
+
+    <div class="login-footer">
+      <p>¿No tienes cuenta? <a routerLink="/register">Regístrate aquí</a></p>
+    </div>
+  </div>
+</div>

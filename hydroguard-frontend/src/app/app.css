@@ -1,0 +1,160 @@
+:host {
+  display: block;
+  background-color: #f4f7f6;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  font-size: 26px;
+  color: #0b4f6c;
+  margin: 0;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 30px;
+}
+
+@media (max-width: 768px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border-top: 4px solid #01baef;
+}
+
+.card h3 {
+  margin-top: 0;
+  color: #0b4f6c;
+  font-size: 18px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #f0f4f8;
+  padding-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #01baef;
+  box-shadow: 0 0 0 3px rgba(1, 186, 239, 0.15);
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 11px;
+  background: linear-gradient(135deg, #01baef, #0b4f6c);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-submit:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.btn-submit:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.incident-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.incident-item {
+  background: #fbfbfb;
+  border: 1px solid #eaeaea;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.incident-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+}
+
+.incident-title {
+  font-weight: 700;
+  color: #0b4f6c;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.incident-desc {
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.incident-location {
+  display: inline-block;
+  background: #e0f7fa;
+  color: #00695c;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.empty-msg {
+  color: #888;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+}

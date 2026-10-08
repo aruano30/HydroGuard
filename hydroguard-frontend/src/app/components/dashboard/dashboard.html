@@ -1,0 +1,92 @@
+<div class="dashboard-container">
+  <!-- Cabecera -->
+  <div class="dashboard-header">
+    <div class="header-title">
+      <h2>HydroGuard 💧 Panel de Control</h2>
+      <p class="user-info">
+        Bienvenido, <strong>{{ usuarioActual.nombre }} {{ usuarioActual.apellido }}</strong>
+        <span class="role-badge">
+          {{ esAdmin() ? 'Administrador' : 'Ciudadano' }}
+        </span>
+      </p>
+    </div>
+    <button (click)="cerrarSesion()" class="btn-logout">Cerrar Sesión</button>
+  </div>
+
+  <!-- Tarjetas de Estadísticas (Resumen) -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-number">{{ totalReportes }}</span>
+      <span class="stat-label">Total Reportes</span>
+    </div>
+    <div class="stat-card pending">
+      <span class="stat-number">{{ totalPendientes }}</span>
+      <span class="stat-label">Pendientes</span>
+    </div>
+    <div class="stat-card resolved">
+      <span class="stat-number">{{ totalResueltos }}</span>
+      <span class="stat-label">Resueltos</span>
+    </div>
+  </div>
+
+  <!-- Contenido Principal en 2 Columnas -->
+  <div class="dashboard-grid">
+    <!-- Columna Izquierda: Formulario de Reporte -->
+    <div class="card">
+      <h3>Registrar Incidencia</h3>
+      <form [formGroup]="incidentForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="titulo">Título</label>
+          <input id="titulo" formControlName="titulo" type="text" placeholder="Ej. Fuga en tubería" />
+        </div>
+
+        <div class="form-group">
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" formControlName="descripcion" placeholder="Detalles del problema..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="ubicacion">Ubicación</label>
+          <input id="ubicacion" formControlName="ubicacion" type="text" placeholder="Ej. Zona 10 Mixco" />
+        </div>
+
+        <button type="submit" [disabled]="incidentForm.invalid" class="btn-primary">Enviar Reporte</button>
+      </form>
+    </div>
+
+    <!-- Columna Derecha: Lista de Incidencias -->
+    <div class="card">
+      <h3>Incidencias Activas en el Sistema</h3>
+      
+      @if (incidents.length === 0) {
+        <div class="empty-state">
+          <p>No hay incidencias registradas.</p>
+        </div>
+      }
+
+      <div class="incidents-list">
+        @for (inc of incidents; track $index) {
+          <div class="incident-item">
+            <h4>{{ inc.titulo }}</h4>
+            <p>{{ inc.descripcion }}</p>
+            
+            <div class="incident-meta">
+              <span>📍 <strong>Ubicación:</strong> {{ inc.ubicacion }}</span>
+              <span>👤 <strong>Reportado por:</strong> {{ inc.usuarioNombre ? (inc.usuarioNombre + ' ' + inc.usuarioApellido) : ('Usuario #' + inc.idUsuario) }}</span>
+            </div>
+
+            <div class="incident-footer">
+              <span [class.badge-resolved]="inc.idEstado === 2" [class.badge-pending]="inc.idEstado !== 2">
+                {{ inc.idEstado === 2 ? 'RESUELTA' : 'PENDIENTE' }}
+              </span>
+
+              @if (esAdmin()) {
+                <button (click)="cambiarEstado(inc)" class="btn-status">Cambiar Estado</button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
