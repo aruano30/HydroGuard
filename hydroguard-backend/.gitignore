@@ -1,0 +1,13 @@
+# Dependencias
+node_modules/
+jspm_packages/
+
+# Entorno y variables privadas
+.env
+
+# Archivos del sistema operativo y editores
+.DS_Store
+Thumbs.db
+.vscode/
+dist/
+build/
