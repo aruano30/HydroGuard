@@ -1,0 +1,47 @@
+<div class="register-page">
+  <div class="register-card">
+    <div class="register-header">
+      <h2>HydroGuard 💧</h2>
+      <p>Registro de Ciudadano</p>
+    </div>
+
+    @if (errorMessage) {
+      <div style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-size: 0.9rem; text-align: center;">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+      <div class="input-group">
+        <label for="nombre">Nombre</label>
+        <input id="nombre" formControlName="nombre" type="text" placeholder="Tu nombre" />
+      </div>
+
+      <div class="input-group">
+        <label for="apellido">Apellido</label>
+        <input id="apellido" formControlName="apellido" type="text" placeholder="Tu apellido" />
+      </div>
+
+      <div class="input-group">
+        <label for="correo">Correo Electrónico</label>
+        <input id="correo" formControlName="correo" type="email" placeholder="correo@example.com" />
+      </div>
+
+      <div class="input-group">
+        <label for="password">Contraseña</label>
+        <input id="password" formControlName="password" type="password" placeholder="Crea una contraseña" />
+      </div>
+
+      <div class="input-group">
+        <label for="telefono">Teléfono</label>
+        <input id="telefono" formControlName="telefono" type="text" placeholder="Tu número de teléfono" />
+      </div>
+
+      <button type="submit" [disabled]="registerForm.invalid" class="btn-primary">Registrarse</button>
+    </form>
+
+    <div class="register-footer">
+      <p>¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
+    </div>
+  </div>
+</div>
