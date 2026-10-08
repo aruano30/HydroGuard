@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api', incidentRoutes);
-app.use('/api', userRoutes);
+app.use('/api/usuarios', userRoutes);
 app.use('/api', statusRoutes); 
 
 app.listen(PORT, async () => {
